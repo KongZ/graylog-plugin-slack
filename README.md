@@ -7,38 +7,49 @@ Slack/Mattermost Plugin for Graylog
 
 Please use version 2.1.0 of this plugin if you are still running Graylog 1.x
 
-#### Detailed alarm notification and message output:
 
-![](https://github.com/Graylog2/graylog-plugin-slack/blob/master/screenshot.png)
+## Features
 
-This plugin can notify [Slack](https://www.slack.com) or [Mattermost](http://www.mattermost.org) channels about triggered alerts in Graylog (Alarm Callback) and also forward each message routed into a stream (Message Output) in realtime.
+### Message output
+Forward messages on streams via message output to Slack.
 
-#### Short mode message output:
+The screenshot below shows a sample of message output Slack .
 
-![](https://github.com/Graylog2/graylog-plugin-slack/blob/master/screenshot-short-mode.png)
+![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_message.png)
 
-Great for streams with higher message throughput. The screenshot shows the output of a nightly task that updates information of the Graylog Marketplace.
+### Notification
+Send notification messages to Slack when alert was raised. 
 
-## v2.0 upgrade notes
+The screenshot below shows a sample of Slack notification.
 
-**Alarm callbacks created with previous plugin versions will be marked as invalid and should be removed using the web interface.** Please create completely new alarm callbacks. Besides that you can just replace the old .jar file in your plugins folder with the new one and restart graylog-server.
+![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_alert.png)
 
-## Changes in v2.0
+* Send message directly to user or channel
+* Support Slack attachment short mode
+* Mention users or channels when alert. Users can be mentioned by field variables.
+* Provide link back to event times
+* Support event timestamp in footer text
+* Support proxy
+* Support custom fields in Slack attachment
+* Support acknowledge buttons. Required Slack app's token
 
-* We are now using the Slack Incoming Webhooks instead of API tokens. This way the plugin is no longer bound to a user.
-* Now includes message output plugin. You can forward messages from a (low throughput) stream directly into Slack. For example for specific error messages or events that happen on your monitored devices and applications. (We are using to be notified about new [Graylog Marketplace](https://marketplace.graylog.org/) submissions for example.)
-* You can now define a color to use. For example red for alerts and green for general notifications.
-* Message can not only be sent to a channel but also as a private message to users. The syntax is *#channel* to send into a channel or *@username* for a private message.
-* Several bugfixes and improvements
+The screenshot below shows an acknowledgement buttons
 
-## Installation
+![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_acknowledgement.png)
 
-[Download the plugin](https://github.com/Graylog2/graylog-plugin-slack/releases)
+Teh screenshot below shows a result of acknowledged
+
+![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_acknowledged.png)
+
+## Upgrade from Graylog plugin Slack version 1.4
+1. You can [Download the plugin](https://github.com/Graylog2/graylog-plugin-slack/releases)
 and place the `.jar` file in your Graylog plugin directory. The plugin directory
 is the `plugins/` folder relative from your `graylog-server` directory by default
 and can be configured in your `graylog.conf` file.
 
-Restart `graylog-server` and you are done.
+2. Remove all previous version of Graylog plugin Slack `.jar` files. in `plugins` directory.
+
+3. Restart a graylog server. Plugin will automatically migrate all your configured data to a new version.
 
 ## Usage
 
@@ -54,9 +65,26 @@ Create a new Slack Incoming Webhook (`https://<organization>.slack.com/services/
 
 Enable Webhooks in general and create an incoming Webhook for Graylog as described in the [Mattermost docs](http://docs.mattermost.com/developer/webhooks-incoming.html).
 
+This plugin is not tested on Mattermost. It should provide a compatibility as of version 1.4.
+
 #### Step 2: Create alarm callback or message output
 
-Create a "Slack alarm callback" on the "Manage alerts" page of your stream. Enter the requested configuration (use the Incoming Webhook URL you created in step 1) and save. Make sure you also configured alert conditions for the stream so that the alerts are actually triggered.
+Create a "Slack Alarm Callback" on the "Manage notifications" page of your alert. Or "Slack Output" on "Manage outputs" page of your stream. Enter the requested configuration (use the Incoming Webhook URL you created in step 1) and save. Make sure you also configured alert conditions for the stream so that the alerts are actually triggered.
+
+### Configuration attributes
+
+* Webhook URL - An URL for sending message to Slack. This field is not required when Slack's token is used.
+* Color - A color of Slack attachment. I recommend `#FF0000` (red) color for alert and `#0000FF` (blue) color for output
+* Channel - A Slack channel or user name to receive a message.
+* Message icon - Override Slack bot icon with this icon URL. You can leave this field empty to use icon which is configured when creating Slack webhook or Slack app.
+* User name - Overide Slack bot user name. You can leave this field empty to use a bot name which is configured when creating Slack webhook or Slack app.
+* Include stream information - You can extend a message by including Graylog Stream information
+* Notify user - When message is sent to Slack, also tag these users or channels. You can direclty enter user name in `@user` or use a field variable to tag a user name which was found on a log. For example, `${login_by}` will tag a Slack user which name was found in Graylog log's field `login_by`
+* Footer icon - Add a footer icon to Slack message
+* Timestamp field - Add a Slack message timestamp. By default, a timestamp should be selected from `timestamp` field
+* Graylog URL - If this field provided, it will add a link back to Graylog server on Slack message
+* Add acknowledge button - Display acknowledge buttons on Slack message. This will allow Slack user to interact with a message. This function requires Slack token.
+* Slack token - A Slack token which is generated from Slack app. This token is required to interact with acknowledge buttons. If Slack `token` is provided,  `Webhook URL` can be omitted
 
 The same applies for message outputs which you can configure in *Stream* - > *Manage Outputs*.
 
@@ -72,6 +100,12 @@ Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.Validator
 
 In this case, add the Slack SSL certificate manually to Java's trust store similar to the process described in the [Graylog documentation](http://docs.graylog.org/en/2.1/pages/configuration/https.html#adding-a-self-signed-certificate-to-the-jvm-trust-store).
 
+### Error occured when click a Slack button.
+Slack app required HTTPS connection between your Graylog server and Slack server. You need to configure your Graylog server with a valid certificate file. Make sure your Graylog server open a firewall allow Slack server to communicate with. 
+
+Most common errors and describe will be send to you by Slack's bot when you click a button. If trouble persists, you can turn a `debug` log on Graylog server to see more detail on log files. 
+
+Please see more information on Slack aps here https://api.slack.com/slack-apps
 
 ## Build
 
