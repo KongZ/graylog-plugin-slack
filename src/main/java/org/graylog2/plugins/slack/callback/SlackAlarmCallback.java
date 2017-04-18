@@ -49,6 +49,7 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
     final String tsField = configuration.getString(CK_FOOTER_TS_FIELD);
     final String customFields = configuration.getString(CK_FIELDS);
     final boolean isAcknowledge = configuration.getBoolean(CK_ACKNOWLEDGE);
+    final String graylogUri = configuration.getString(CK_GRAYLOG2_URL);
     // Create Message
     SlackMessage message =
         new SlackMessage(
@@ -115,9 +116,16 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
                   new SlackMessage.Action("acknowledge", "Acknowledge", "true", "primary"),
                   new SlackMessage.Action("decline", "It is not me!!", "true", "danger"));
         }
+        String backLogMessage = null;
+        if (isNullOrEmpty(graylogUri)) {
+          backLogMessage = backlogItem.getMessage();
+        }
+        else {
+          backLogMessage = new StringBuilder().append(backlogItem.getMessage()).append(" <").append(buildMessageLink(graylogUri, backlogItem)).append("|Permalink>").toString();
+        }
         final SlackMessage.Attachment attachment =
             message.addAttachment(
-                backlogItem.getMessage(),
+                backLogMessage,
                 color,
                 footer,
                 footerIconUrl,
@@ -156,7 +164,9 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
     final List<MessageSummary> backlogSummaries = matchingMessages.subList(0, effectiveBacklogSize);
     final List<Message> backlog = Lists.newArrayListWithCapacity(effectiveBacklogSize);
     for (MessageSummary messageSummary : backlogSummaries) {
-      backlog.add(messageSummary.getRawMessage());
+      Message message = messageSummary.getRawMessage();
+      message.addField("gl2_document_index", messageSummary.getIndex());
+      backlog.add(message);
     }
 
     return backlog;
