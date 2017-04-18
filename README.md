@@ -37,7 +37,7 @@ The screenshot below shows an acknowledgement buttons
 
 ![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_acknowledgement.png)
 
-Teh screenshot below shows a result of acknowledged
+The screenshot below shows a result of acknowledged
 
 ![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_acknowledged.png)
 
@@ -77,9 +77,9 @@ Create a "Slack Alarm Callback" on the "Manage notifications" page of your alert
 * Color - A color of Slack attachment. I recommend `#FF0000` (red) color for alert and `#0000FF` (blue) color for output
 * Channel - A Slack channel or user name to receive a message.
 * Message icon - Override Slack bot icon with this icon URL. You can leave this field empty to use icon which is configured when creating Slack webhook or Slack app.
-* User name - Overide Slack bot user name. You can leave this field empty to use a bot name which is configured when creating Slack webhook or Slack app.
+* User name - Override Slack bot user name. You can leave this field empty to use a bot name which is configured when creating Slack webhook or Slack app.
 * Include stream information - You can extend a message by including Graylog Stream information
-* Notify user - When message is sent to Slack, also tag these users or channels. You can direclty enter user name in `@user` or use a field variable to tag a user name which was found on a log. For example, `${login_by}` will tag a Slack user which name was found in Graylog log's field `login_by`
+* Notify user - When message is sent to Slack, also tag these users or channels. You can directly enter user name in `@user` or use a field variable to tag a user name which was found on a log. For example, `${login_by}` will tag a Slack user which name was found in Graylog log's field `login_by`
 * Footer icon - Add a footer icon to Slack message
 * Timestamp field - Add a Slack message timestamp. By default, a timestamp should be selected from `timestamp` field
 * Graylog URL - If this field provided, it will add a link back to Graylog server on Slack message
@@ -100,7 +100,7 @@ Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.Validator
 
 In this case, add the Slack SSL certificate manually to Java's trust store similar to the process described in the [Graylog documentation](http://docs.graylog.org/en/2.1/pages/configuration/https.html#adding-a-self-signed-certificate-to-the-jvm-trust-store).
 
-### Error occured when click a Slack button.
+### Error occurred when clicks a Slack button.
 Slack app required HTTPS connection between your Graylog server and Slack server. You need to configure your Graylog server with a valid certificate file. Make sure your Graylog server open a firewall allow Slack server to communicate with. 
 
 Most common errors and describe will be send to you by Slack's bot when you click a button. If trouble persists, you can turn a `debug` log on Graylog server to see more detail on log files. 
