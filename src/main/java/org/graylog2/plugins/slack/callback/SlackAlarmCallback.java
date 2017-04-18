@@ -23,14 +23,11 @@ import org.graylog2.plugins.slack.SlackPluginBase;
 import org.graylog2.plugins.slack.StringReplacement;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** 
  * Call by Graylog when Alarm was occured. 
  */
 public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback {
-  private static final Logger LOG = LoggerFactory.getLogger(SlackClient.class);
   private Configuration configuration;
 
   @Override
@@ -237,6 +234,6 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
 
   @Override
   public String getName() {
-    return "Slack alarm callback";
+    return "Slack Alarm Callback";
   }
 }

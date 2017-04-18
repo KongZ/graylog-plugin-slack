@@ -135,7 +135,7 @@ public class SlackPluginBase {
             CK_PROXY_ADDRESS,
             "Proxy",
             null,
-            "Please insert the proxy information in the follwoing format: <ProxyAddress>:<Port>",
+            "Please insert the proxy information in the following format: <ProxyAddress>:<Port>",
             ConfigurationField.Optional.OPTIONAL));
     configurationRequest.addField(
         new TextField(
