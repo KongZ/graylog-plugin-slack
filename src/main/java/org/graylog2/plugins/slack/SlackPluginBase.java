@@ -31,6 +31,7 @@ public class SlackPluginBase {
   public static final String CK_FOOTER_TS_FIELD = "ts_field";
   public static final String CK_ACKNOWLEDGE = "acknowledge";
   public static final String CK_TOKEN = "token";
+  public static final String CK_PREFORMAT = "preformat";
 
   protected static ConfigurationRequest configuration() {
     final ConfigurationRequest configurationRequest = new ConfigurationRequest();
@@ -149,7 +150,13 @@ public class SlackPluginBase {
             CK_ACKNOWLEDGE,
             "Add acknowledge button",
             false,
-            "Include acknowledge buttons in alert message. This feature require either webhook URL from Slack app or Slack token. (Recommend Slack token"));
+            "Include acknowledge buttons in alert message. This feature require either webhook URL from Slack app or Slack token. (Recommend Slack token)"));
+    configurationRequest.addField(
+        new BooleanField(
+            CK_PREFORMAT,
+            "Use pre-formatted text",
+            false,
+            "Create a block of pre-formatted, fixed-width text on backlog items"));
     // To use Slack Interactive Button, you need Slack App.
     // To mention user on Slack App's web hook, you need Slack Token
     configurationRequest.addField(

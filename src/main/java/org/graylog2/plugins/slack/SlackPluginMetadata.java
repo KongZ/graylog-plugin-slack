@@ -21,17 +21,17 @@ public class SlackPluginMetadata implements PluginMetaData {
 
   @Override
   public String getAuthor() {
-    return "Graylog, Inc.";
+    return "Omise";
   }
 
   @Override
   public URI getURL() {
-    return URI.create("https://www.graylog.org");
+    return URI.create("https://github.com/omise/graylog-plugin-slack");
   }
 
   @Override
   public Version getVersion() {
-    return new Version(2, 6, 0);
+    return new Version(2, 7, 0);
   }
 
   @Override

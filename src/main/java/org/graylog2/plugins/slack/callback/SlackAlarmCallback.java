@@ -49,6 +49,8 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
     final String tsField = configuration.getString(CK_FOOTER_TS_FIELD);
     final String customFields = configuration.getString(CK_FIELDS);
     final boolean isAcknowledge = configuration.getBoolean(CK_ACKNOWLEDGE);
+    final String graylogUri = configuration.getString(CK_GRAYLOG2_URL);
+    final boolean isPreFormat = configuration.getBoolean(CK_PREFORMAT);
     // Create Message
     SlackMessage message =
         new SlackMessage(
@@ -115,15 +117,22 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
                   new SlackMessage.Action("acknowledge", "Acknowledge", "true", "primary"),
                   new SlackMessage.Action("decline", "It is not me!!", "true", "danger"));
         }
+        StringBuilder backLogMessage = new StringBuilder(backlogItem.getMessage());
+        if (isPreFormat)
+          backLogMessage.insert(0, "```").append("```");
+        if (!isNullOrEmpty(graylogUri))
+          backLogMessage.append(" <").append(buildMessageLink(graylogUri, backlogItem)).append("|Permalink>").toString();
         final SlackMessage.Attachment attachment =
             message.addAttachment(
-                backlogItem.getMessage(),
+                backLogMessage.toString(),
                 color,
                 footer,
                 footerIconUrl,
                 ts,
                 backlogItem.getId(),
                 actionList);
+        if (isPreFormat)
+          attachment.setMarkdownIn("text");
         // Add custom fields from backlog list
         if (fields.length > 0) {
           Arrays.stream(fields)
@@ -203,7 +212,6 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
       }
       message.append(notifyUser.trim()).append(' ');
     }
-    message.append(result.getResultDescription());
     if (!isNullOrEmpty(graylogUri)) {
       message
           .append(" <")
@@ -213,6 +221,12 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
           .append('>');
     } else {
       message.append(" _").append(stream.getTitle()).append('_');
+    }
+    // Original Graylog message is too redundant. Try to make it short but it must compatible with all 3 Alerts type
+    // message.append(result.getResultDescription());
+    String description = result.getResultDescription();
+    if (description != null) {
+      message.append(description.replaceFirst("Stream", ""));
     }
     return message.toString();
   }

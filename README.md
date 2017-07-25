@@ -15,14 +15,14 @@ Forward messages on streams via message output to Slack.
 
 The screenshot below shows a sample of message output Slack .
 
-![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_message.png)
+![](https://github.com/omise/graylog-plugin-slack/blob/omise/screenshort_message.png)
 
 ### Notification
 Send notification messages to Slack when alert was raised. 
 
 The screenshot below shows a sample of Slack notification.
 
-![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_alert.png)
+![](https://github.com/omise/graylog-plugin-slack/blob/omise/screenshort_alert.png)
 
 * Send message directly to user or channel
 * Support Slack attachment short mode
@@ -32,14 +32,20 @@ The screenshot below shows a sample of Slack notification.
 * Support proxy
 * Support custom fields in Slack attachment
 * Support acknowledge buttons. Required Slack app's token
+* Support pre-formatted text in backlog item
 
 The screenshot below shows an acknowledgement buttons
 
-![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_acknowledgement.png)
+![](https://github.com/omise/graylog-plugin-slack/blob/omise/screenshort_acknowledgement.png)
 
 The screenshot below shows a result of acknowledged
 
-![](https://github.com/omise/graylog-plugin-slack/blob/new_slack_plugin_with_acknowledgement/screenshort_acknowledged.png)
+![](https://github.com/omise/graylog-plugin-slack/blob/omise/screenshort_acknowledged.png)
+
+The screenshot below shows a pre-formatted text with acknowledgement buttons
+
+![](https://github.com/omise/graylog-plugin-slack/blob/omise/screenshot_preformat.png)
+
 
 ## Upgrade from Graylog plugin Slack version 1.4
 1. You can [Download the plugin](https://github.com/Graylog2/graylog-plugin-slack/releases)
