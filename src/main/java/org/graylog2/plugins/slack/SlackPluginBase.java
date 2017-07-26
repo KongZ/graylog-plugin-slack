@@ -3,6 +3,7 @@ package org.graylog2.plugins.slack;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import org.graylog2.plugin.Message;
 import org.graylog2.plugin.configuration.Configuration;
 import org.graylog2.plugin.configuration.ConfigurationException;
 import org.graylog2.plugin.configuration.ConfigurationRequest;
@@ -207,9 +208,18 @@ public class SlackPluginBase {
   }
 
   protected String buildStreamLink(String baseUrl, Stream stream) {
+    StringBuilder builder = new StringBuilder(baseUrl);
     if (!baseUrl.endsWith("/")) {
-      baseUrl = baseUrl + "/";
+        builder.append('/');
     }
-    return baseUrl + "streams/" + stream.getId() + "/messages?q=*&rangetype=relative&relative=3600";
+    return builder.append("streams/").append(stream.getId()).append("/messages?q=*&rangetype=relative&relative=3600").toString();
+  }
+
+  protected String buildMessageLink(String baseUrl, Message message) {
+    StringBuilder builder = new StringBuilder(baseUrl);
+    if (!baseUrl.endsWith("/")) {
+        builder.append('/');
+    }
+    return builder.append("messages/").append(message.getField("gl2_document_index")).append('/').append(message.getId()).toString();
   }
 }

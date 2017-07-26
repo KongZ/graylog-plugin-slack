@@ -165,7 +165,9 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
     final List<MessageSummary> backlogSummaries = matchingMessages.subList(0, effectiveBacklogSize);
     final List<Message> backlog = Lists.newArrayListWithCapacity(effectiveBacklogSize);
     for (MessageSummary messageSummary : backlogSummaries) {
-      backlog.add(messageSummary.getRawMessage());
+      Message message = messageSummary.getRawMessage();
+      message.addField("gl2_document_index", messageSummary.getIndex());
+      backlog.add(message);
     }
 
     return backlog;
