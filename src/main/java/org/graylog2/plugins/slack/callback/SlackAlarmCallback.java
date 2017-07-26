@@ -91,11 +91,11 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
         Long ts = null;
         if (!isNullOrEmpty(footerText)) {
           footer = StringReplacement.replace(footerText, backlogItem.getFields()).trim();
+          if (!isNullOrEmpty(graylogUri))
+            footer = new StringBuilder("<").append(buildMessageLink(graylogUri, backlogItem)).append('|').append(footer).append('>').toString();
           try {
             DateTime timestamp = null;
-            if ("timestamp"
-                .equals(
-                    tsField)) { // timestamp is reserved field in org.graylog2.notifications.NotificationImpl
+            if ("timestamp".equals(tsField)) { // timestamp is reserved field in org.graylog2.notifications.NotificationImpl
               timestamp = backlogItem.getTimestamp();
             } else {
               Object value = backlogItem.getField(tsField);
@@ -120,8 +120,6 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
         StringBuilder backLogMessage = new StringBuilder(backlogItem.getMessage());
         if (isPreFormat)
           backLogMessage.insert(0, "```").append("```");
-        if (!isNullOrEmpty(graylogUri))
-          backLogMessage.append(" <").append(buildMessageLink(graylogUri, backlogItem)).append("|Permalink>").toString();
         final SlackMessage.Attachment attachment =
             message.addAttachment(
                 backLogMessage.toString(),
