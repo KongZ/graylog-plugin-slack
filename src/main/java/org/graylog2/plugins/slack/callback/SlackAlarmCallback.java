@@ -218,15 +218,15 @@ public class SlackAlarmCallback extends SlackPluginBase implements AlarmCallback
           .append(buildStreamLink(graylogUri, stream))
           .append('|')
           .append(stream.getTitle())
-          .append('>');
+          .append("> ");
     } else {
-      message.append(" _").append(stream.getTitle()).append('_');
+      message.append(" _").append(stream.getTitle()).append("_ ");
     }
     // Original Graylog message is too redundant. Try to make it short but it must compatible with all 3 Alerts type
     // message.append(result.getResultDescription());
     String description = result.getResultDescription();
     if (description != null) {
-      message.append(description.replaceFirst("Stream", ""));
+      message.append(description.replaceFirst("Stream", "").trim());
     }
     return message.toString();
   }
