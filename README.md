@@ -1,6 +1,8 @@
 Slack Plugin for Graylog
 ========================
 
+**Note:** This plugin has been rewriten to support Graylog 3.1. If you're using Graylog 3.1 and later, please checkout https://github.com/omise/graylog-plugin-slack-notification
+
 **Note:** This plugin is forked from https://github.com/graylog-labs/graylog-plugin-slack.
 The features are submitted as pull-request to original Graylog Plugin and still waiting for reviewing.
 
